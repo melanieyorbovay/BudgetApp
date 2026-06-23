@@ -29,9 +29,9 @@ Projet réalisé dans le cadre d'un **TPI (Travail Pratique Individuel) – cert
 ### Évolution des dépenses
 ![Graphique des dépenses](docs/graphique.png)
 
-```json
-Comment la lancer
-```
+
+## Comment la lancer
+
 
 Il faut **SQL Server Express** et **.NET 10** installés.
 
