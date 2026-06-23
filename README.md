@@ -36,7 +36,7 @@ Projet réalisé dans le cadre d'un **TPI (Travail Pratique Individuel) – cert
 Il faut **SQL Server Express** et **.NET 10** installés.
 
 1. Cloner le dépôt.
-2. Créer la base `Facture2026` et l'alimenter avec les scripts SQL du dossier `Scripts/`.
+2. Créer votre base et l'alimenter avec les scripts SQL.
 3. Dans Visual Studio : clic droit sur le projet → **Gérer les secrets utilisateur**, puis y mettre sa propre chaîne de connexion :
 ```json
 {
