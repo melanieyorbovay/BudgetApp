@@ -41,7 +41,7 @@ Il faut **SQL Server Express** et **.NET 10** installés.
 ```json
 {
   "ConnectionStrings": {
-    "BudgetApp": "Server=.\\SQLEXPRESS;Database=Facture2026;Trusted_Connection=True;TrustServerCertificate=True;"
+    "BudgetApp": "Server=.\\SQLEXPRESS;Database=NOMDELABASE;Trusted_Connection=True;TrustServerCertificate=True;"
   }
 }
 ```
