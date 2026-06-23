@@ -1,0 +1,15 @@
+[Bb]in/
+[Oo]bj/
+/[Ll]og/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+.vs/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+build/
+*.userprefs
+mono_crash.*

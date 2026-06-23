@@ -1,0 +1,67 @@
+﻿@model BudgetApp.ModelsV2.LigneAchat
+@{
+    ViewData["Title"] = "Modifier la ligne";
+    var idTicket = ViewBag.IdTicket;
+}
+
+<div class="container py-4" style="max-width: 600px;">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="fas fa-edit me-2" style="color:#F59E0B"></i>Modifier la ligne</h2>
+        <a href="/Ticket/Detail/@idTicket" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i> Retour
+        </a>
+    </div>
+
+    <div class="card shadow" style="border-radius:16px; border:none;">
+        <div class="card-header text-white"
+             style="background: linear-gradient(135deg, #F59E0B, #FCD34D); border-radius:16px 16px 0 0;">
+            <i class="fas fa-shopping-basket me-2"></i>
+            @Model.IdArticleNavigation?.NomArticle
+        </div>
+        <div class="card-body">
+            <form method="post" action="/Ticket/ModifierLigne">
+                <input type="hidden" name="idAchatLigne" value="@Model.IdAchatLigne" />
+                <input type="hidden" name="idTicket" value="@idTicket" />
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">
+                        <i class="fas fa-balance-scale me-1" style="color:#F59E0B"></i> Quantité
+                    </label>
+                    <input type="number" name="quantite" class="form-control"
+                           step="0.001" min="0.001"
+                           value="@Model.Quantite" required />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">
+                        <i class="fas fa-tag me-1" style="color:#F59E0B"></i> Prix unitaire CHF
+                    </label>
+                    <input type="number" name="prixUnitaire" class="form-control"
+                           step="0.01" min="0.01"
+                           value="@Model.PrixUnitaire" required />
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold">
+                        <i class="fas fa-percent me-1" style="color:#F59E0B"></i> Rabais CHF
+                    </label>
+                    <input type="number" name="rabais" class="form-control"
+                           step="0.01" min="0"
+                           value="@Model.Rabais" required />
+                </div>
+
+                <div class="mb-3 p-3 rounded" style="background:#FEF3C7;">
+                    <strong>Total ligne : </strong>
+                    <span class="fw-bold text-success">
+                        @Model.MontantLigne.ToString("N2") CHF
+                    </span>
+                </div>
+
+                <button type="submit" class="btn w-100 text-white"
+                        style="background: linear-gradient(135deg, #F59E0B, #FCD34D); border:none; border-radius:10px;">
+                    <i class="fas fa-save me-1"></i> Enregistrer les modifications
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

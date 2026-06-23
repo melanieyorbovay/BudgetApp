@@ -1,0 +1,97 @@
+﻿@{
+    ViewData["Title"] = "Accueil";
+    var derniersTickets = ViewBag.DerniersTickets as List<BudgetApp.ModelsV2.Ticket>;
+}
+
+<div class="container-fluid py-4">
+    <div class="hero-banner">
+        <div class="row align-items-center">
+            <div class="col-mb-8">
+                <h1 class="fw-bold md-2" style="font-size: 36px;">
+                    <i class="fas fa-wallet me-3"></i>BudgetApp
+                </h1>
+                <p class="mb-0" style="font-size: 16px; opacity: 0.9;">
+                    Suivre les dépenses et comparer les prix des magasins
+                </p>
+            </div>
+            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                <a href="/Ticket/Ajouter" class="btn btn-light"
+                   style="color: #6C3FC5; font-weight: 600; border-radius: 10px;">
+                   <i class="fas fa-plus me-2"></i>Nouveau ticket
+               </a>
+            </div>
+        </div>
+    </div>
+     <div class="row mb-4 g-4">
+          <div class="col-md-4">
+              <div class="stat-card violet">
+                  <div class="stat-icon"><i class="fas fa-coins"></i></div>
+                  <div class="stat-value">@ViewBag.TotalDepenses</div>
+                  <div class="stat-label"><i class="fas fa-chart-line me-1"></i>Total des dépenses (CHF)</div>
+          </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-card indigo">
+            <div class="stat-icon"><i class="fas fa-receipt"></i></div>
+            <div class="stat-value">@ViewBag.NbTickets</div>
+            <div class="stat-label"><i class="fas fa-shopping-bag me-1"></i>Tickets enregistrés</div>
+        </div>
+    </div>
+<!-- 3 e carte: (articles)-->
+<div class="col-md-4">
+    <div class="stat-card rose">
+        <div class="stat-icon"><i class="fas fa-box"></i></div>
+        <div class="stat-value">@ViewBag.NbArticles</div>
+        <div class="stat-label"><i class="fas fa-list me-1"></i>Articles enregistrés</div>
+    </div>
+    </div>
+</div>
+
+<!--Derniers achats-->
+<div class="card-theme card">
+    <div class="card-header card-header-violet">
+        <i class="fas fa-clock me-2"></i>Derniers achats
+    </div>
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th class="ps-4">Date</th>
+                    <th>Magasin</th>
+                    <th>Localité</th>
+                    <th class="text-end pe-4">Total CHF</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var ticket in derniersTickets)
+                    {
+                        <tr>
+                            <td class="ps-4">
+                                <i class="fas fa-calendar-alt me-2 text-purple"
+                                    style="color:#A855F7"></i>
+                                    @ticket.DateAchat.ToString("dd.MM.yyyy")
+                            </td>
+                            <td>
+                                <span class="badge-magasin">
+                                    <i class="fas fa-store me-1"></i>
+                                    @ticket.Magasin?.NomMagasin
+                                </span>
+                           </td>
+                           <td>
+                               <i class="fas fa-map-marker-alt me-1"
+                                  style="color:#A855F7"></i>
+                                  @ticket.Magasin?.Localite
+                           </td>
+                           <td class="text-end pe-4">
+                               <span class="total-badge">
+                                   @ticket.Total.ToString("N2") CHF
+                               </span>
+                           </td>
+                        </tr>
+                       }
+               </tbody>
+        </table>
+    </div>
+   </div>
+   
+</div>

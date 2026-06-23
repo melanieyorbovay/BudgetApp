@@ -1,0 +1,1 @@
+dotnet-ef dbcontext scaffold "Data Source=.\SQLEXPRESS;Initial Catalog=Facture2026;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Command Timeout=0" "Microsoft.EntityFrameWorkCore.SqlServer" -o ModelsV2 -c DataContext -p BudgetApp

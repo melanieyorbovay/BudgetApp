@@ -1,0 +1,110 @@
+﻿
+@{
+    ViewData["Title"] = "Nouveaux ticket";
+    var magasins = ViewBag.Magasins as List<BudgetApp.ModelsV2.Magasin>;
+}
+<div class="container py-4" style="max-width: 600px;">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="fas fa-plus-circle me-2" style="color:#A855F7"></i>Nouveau ticket</h2>
+            <a href="/Ticket" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-1"></i> Retour
+            </a>
+        
+    </div>
+    <div class="card-theme card mb-4">
+        <div class="card-header card-header-violet">
+                <i class="fas fa-receipt me-2"></i>Information du ticket
+        </div>
+        <div class="card-body"> 
+            <form method="post" action="/Ticket/Ajouter">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">
+                        <i class="fas fa-calendar me-1" style="color:#A855F7"></i> Date d'achat
+                    </label>
+                    <input type="date" name="dateAchat" class="form-control"
+                    value="@DateTime.Today.ToString("yyyy-MM-dd")" required/>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold">
+                        <i class="fas fa-store me-1" style="color:#A855F7"></i> Magasin
+                    </label>
+                    <select name="idMagasin" class="form-select" id="selectMagasin"
+                            onchange="toggleNouveauMagasin(this)" required>
+                        <option value="">-- Choisir un magasin --</option>
+                        @foreach (var magasin in magasins)
+                            {
+                                <option value="@magasin.IdMagasin">
+                                    @magasin.NomMagasin - @magasin.Localite
+                                </option>
+                            }
+                            <option value="nouveau"> Nouveau magasin...</option>
+                        </select>
+                    
+                </div>
+                <button type="submit" class="btn btn-theme w-100">
+                    <i class="fas fa-arrow-right me-1"></i> Continuer - Ajouter les articles
+                </button>
+            </form>
+        </div>
+    </div>
+    <!-- Formulaire nouveau magasin - caché par défaut-->
+        <div class="card-theme card" id="formNouveauMagasin"
+            style="display:none;">
+            <div class="card-header card-header-indigo">
+                 <i class="fas fa-plus me-2"></i>Nouveau magasin 
+             </div>
+             <div class="card-body">
+                 <form method="post" action="/Ticket/AjouterMagasin">
+                     <div class="mb-3">
+                         <label class="form-label fw-bold">
+                             <i class="fas fa-store me-1" style="color:#818CF8"></i> Nom du magasin
+                         </label>
+                         <input type="text" name="nomMagasin" class="form-control"
+                                placeholder="Ex: Coop"/>
+                     </div>
+                     <div class="mb-4">
+                         <label class="form-label fw-bold">
+                             <i class="fas fa-map-marker-alt me-1" style="color:#818CF8"></i> Localité
+                         </label>
+                         <input type="text" name="localite" class="form-control"
+                                placeholder="Ex: Lausanne"/>
+                     </div>
+                     <div class="d-flex gap-2">
+                         <button type="submit" class="btn btn-theme flex-grow-1">
+                                 <i class="fas fa-save me-1"></i> Enregistrer le magasin
+                             </button>
+                             <button type="button" class="btn btn-outline-secondary"
+                                     onclick="annulerNouveauMagasin()">
+                                Annuler
+                                 
+                             </button>
+                     </div>
+                     
+                 </form>
+             </div>
+        
+        </div>
+</div>
+
+<script>
+    function toggleNouveauMagasin(select) {
+        var form = document.getElementById('formNouveauMagasin');
+        if (select.value == 'nouveau') {
+            form.style.display = 'block';
+            select.required = false;
+
+        } else {
+            form.style.display = 'none';
+            select.required = true;
+        }
+
+    }
+    function annulerNouveauMagasin() {
+        document.getElementById('formNouveauMagasin').style.display ='none';
+        var select = document.getElementById('selectMagasin');
+        select.value = '';
+        select.required = true;
+    }
+
+</script>

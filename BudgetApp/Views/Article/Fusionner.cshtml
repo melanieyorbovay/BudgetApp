@@ -1,0 +1,64 @@
+﻿@{
+    ViewData["Title"] = "Fusionner des articles";
+    var articles = ViewBag.Articles as List<BudgetApp.ModelsV2.Article>;
+}
+<div class="container py-4" style="max-width: 600px;">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="fas fa-code-merge me-2" style="color:#6C3FC5"></i>Fusionner des articles</h2>
+        <a href="/Article" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i> Retour
+        </a>
+    </div>
+
+    <div class="alert alert-info">
+        <i class="fas fa-info-circle me-2"></i>
+        Tous les achats de l'article à fusionner seront transférés vers l'article gardé,
+        puis le doublon sera supprimé.
+    </div>
+
+    <div class="card-theme card">
+        <div class="card-header card-header-violet">
+            <i class="fas fa-code-merge me-2"></i>Choix des articles
+        </div>
+        <div class="card-body">
+            <form method="post" action="/Article/Fusionner">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">
+                        <i class="fas fa-check-circle me-1 text-success"></i> Article à garder
+                    </label>
+                    <select name="idGarder" class="form-select" required>
+                        <option value="">-- Choisir --</option>
+                        @foreach (var a in articles)
+                        {
+                            <option value="@a.IdArticle">
+                                @a.NomArticle (@a.Unite) - @a.LigneAchats.Count achat(s)
+                            </option>
+                        }
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label fw-bold">
+                        <i class="fas fa-trash me-1 text-danger"></i> Article à fusionner (sera supprimé)
+                    </label>
+                    <select name="idFusionner" class="form-select" required>
+                        <option value="">-- Choisir --</option>
+                        @foreach (var a in articles)
+                        {
+                            <option value="@a.IdArticle">
+                                @a.NomArticle (@a.Unite) - @a.LigneAchats.Count achat(s)
+                            </option>
+                        }
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-theme w-100"
+                        onclick="return confirm('Confirmer la fusion? Cette action est irréversible.')">
+                    <i class="fas fa-code-merge me-1"></i> Fusionner
+                </button>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+   

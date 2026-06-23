@@ -1,0 +1,79 @@
+﻿
+@{
+    ViewData["Title"] = "Graphiques";
+}
+<div class="container-fluid py-4">
+
+    <div class="d-flex align-items-center mb-4 p-4 text-white"
+        style="background: linear-gradient(135deg, #6C3FC5 0%, #A855F7 50%, #EC4899 100%);
+              border-radius: 16px; box-shadow: 0 8px 20px rgba(108,63,197,0.25);">
+
+        <svg width="46" height="46" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="me-3">
+            <rect x="6" y="12" width="36" height="26" rx="5" fill="#ffffff" />
+            <path d="M6 17a5 5 0 0 1 5-5h21l-3.2-3.2A3 3 0 0 0 26.7 8H11a5 5 0 0 0-5 5v4Z" fill="#ffffff" fill-opacity="0.85" />
+            <rect x="30" y="22" width="14" height="9" rx="3" fill="#6C3FC5" />
+            <circle cx="35.5" cy="26.5" r="2" fill="#ffffff" /> </svg>
+
+       <!-- <i class="fas fa-chart-column fa-2x me-3"></i> (Ancienne icone)-->
+        <div>
+            <h2 class="fw-bold mb-0">Évolution des dépenses</h2>
+            <small style="opacity:.9;">Mes dépenses par mois, en CHF</small>
+        </div>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-header">
+            <i class="fas fa-chart-line me-1"></i> Dépenses par mois (CHF)
+        </div>
+        <div class="card-body">
+            <canvas id="graphiqueDepenses" height="100"></canvas>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const labels = @Html.Raw(ViewBag.Labels);
+    const valeurs = @Html.Raw(ViewBag.Valeurs);
+    const ctx = document.getElementById('graphiqueDepenses').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Dépenses CHF',
+                data: valeurs,
+                backgroundColor: 'rgba(108, 63, 197, 0.5)',
+                borderColor: 'rgba(108, 63, 197, 1)',
+                borderWidth: 2,
+                borderRadius: 6
+            }]
+        },
+        options: {
+            reponsive: true,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.parsed.y.toFixed(2) + 'CHF';
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return value.toFixed(2) + 'CHF';
+                        }
+                    }
+                }
+            }
+        }
+
+    });
+
+</script>

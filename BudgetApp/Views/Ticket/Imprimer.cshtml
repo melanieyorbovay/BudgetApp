@@ -1,0 +1,71 @@
+﻿
+@model BudgetApp.ModelsV2.Ticket
+@{
+    ViewData["Title"] = "Imprimer ticket";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Ticket @Model.DateAchat,ToString("dd.MM.yyyy") - @Model.Magasin?NomMagasin</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        h1 { text-align: center; font-size: 22px; }
+        .infos { margin: 20px 0; font-size: 14px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px }
+        th { background: #2C3E50; color:white; padding: 8px; text-align: left; }
+        td { padding: 6px 8px; border-bottom: 1px solid #ddd; font-size: 13px; }
+        .text-end { text-align: right; }
+        .total { font-size: 16px; font-weight: bold; text-align: right; margin-top: 15px; }
+        @@media print { .no-print { display: none; }}
+    </style>
+
+</head>
+<body>
+    <h1>Ticket de caisse</h1>
+    <div class="infos">
+        <strong>Date :</strong> @Model.DateAchat.ToString("dd.MM.yyyy")<br/>
+        <strong>Magasin :</strong> @Model.Magasin?.NomMagasin - @Model.Magasin?.Localite
+    </div>
+    <hr/>
+    <table>
+        <thead>
+            <tr>
+                <th>Article</th>
+                <th>Unité</th>
+                <th class="text-end">Qté</th>
+                <th class="text-end">Prix unit.</th>
+                <th class="text-end">Rabais</th>
+                <th class="text-end">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ligne in Model.Lignes)
+                {
+                    <tr>
+                        <td>@ligne.Article?.NomArticle</td>
+                        <td>@ligne.Article?.Unite</td>
+                        <td class="text-end">@ligne.Quantite.ToString("0.###")</td>
+                        <td class="text-end">@ligne.PrixUnitaire.ToString("N2")</td>
+                        <td class="text-end">@ligne.Rabais.ToString("N2")</td>
+                        <td class="text-end">@ligne.MontantLigne.ToString("N2")</td>
+                    </tr>
+                }
+            </tbody>
+    </table>
+    <div class="total">TOTAL : @Model.Total.ToString("N2") CHF</div>
+
+    <div class="no-print" style="margin-top:30px; text-align:center;">
+        <button onclick="window.print()"
+                style="padding:10px 30px; background:#2C3E50; color:white; border:none; cursor:pointer; font-size:14px;">
+            Imprimer
+            </button>
+            <a href="/Ticket/Detail/@Model.IdTicket"
+                style=margin"-left:15px; font-size:14px;"> Retour</a>
+    </div>
+    <script>
+        windows.onload = function() { window.print(); }
+    </script>
+</body>
+</html>

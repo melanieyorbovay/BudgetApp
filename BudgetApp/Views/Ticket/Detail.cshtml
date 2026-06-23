@@ -1,0 +1,86 @@
+﻿
+@model BudgetApp.ModelsV2.Ticket
+@{
+    ViewData["Title"] = "Détails ticket";
+}
+
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="fas fa-receipt me-2"></i> Détails du ticket</h2>
+        <div>
+            <a href="/Ticket/Imprimer/@Model.IdTicket" class="btn btn-secondary me-2">
+                <i class="fas fa-print me-1"></i> Imprimer
+            </a>
+            <a href="/Ticket" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-1"></i> Retour
+            </a>
+        </div>
+    </div>
+    <!-- Infos Tickets-->
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <strong><i class="fas fa-calendar me-1"></i> Date :</strong>
+                    @Model.DateAchat.ToString("dd.MM.yyyy")
+                </div>
+                <div class="col-md-4">
+                    <strong><i class="fas fa-store me-1"></i> Magasin :</strong>
+                    @Model.Magasin?.NomMagasin
+                </div>
+                <div class="col-md-4">
+                    <strong><i class="fas fa-map-marker-alt me-1"></i> Localité</strong>
+                    @Model.Magasin?.Localite
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <!--Ligne du ticket-->
+    <div class="card shadow">
+        <div class="card-body p-0">
+            <table class="table table-hover table-striped mb-0">
+                <thead>
+                <tr>
+                    <th>Article</th>
+                    <th>Unité</th>
+                    <th class="text-end">Quantité</th>
+                    <th class="text-end">Prix unit. CHF</th>
+                    <th class="text-end">Rabais CHF</th>
+                    <th class="text-end">Total CHF</th>
+                    <th></th> <!-- ajouter -->
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var ligne in Model.Lignes)
+                    {
+                        <tr>
+                            <td>@ligne.Article?.NomArticle</td>
+                            <td>@ligne.Article?.Unite</td>
+                            <td class="text-end">@ligne.Quantite.ToString("0.###")</td>
+                            <td class="text-end">@ligne.PrixUnitaire.ToString("N2")</td>
+                            <td class="text-end">@ligne.Rabais.ToString("N2")</td>
+                            <td class="text-end fw-bold">@ligne.MontantLigne.ToString("N2")</td>
+                            <td>
+                                <a href="/Ticket/ModifierLigne/@ligne.IdAchatLigne?idTicket=@Model.IdTicket"
+                                    class="btn btn-warning btn-sm">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                        </td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot class="table-light">
+                    <tr>
+                        <td colspan="5" class="text-end fw-bold">TOTAL :</td>
+                        <td class="text-end fw-bold text-success fs-5">
+                            @Model.Total.ToString("N2") CHF
+                        </td>
+                    </tr>
+                </tfoot>
+
+            </table>
+        </div>
+    </div>
+</div>

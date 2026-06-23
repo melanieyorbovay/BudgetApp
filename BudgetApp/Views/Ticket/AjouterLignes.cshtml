@@ -1,0 +1,214 @@
+﻿@model BudgetApp.ModelsV2.Ticket
+@{
+    ViewData["Title"] = "Ajouter les articles";
+    var articles = ViewBag.Articles as List<BudgetApp.ModelsV2.Article>;
+    var categories = ViewBag.Categories as List<BudgetApp.ModelsV2.Categorie>;
+}
+<div class="container-fluid py-4">
+    <!--Ajout message d'erreur/succes-->
+    @if (TempData["ErreurArticle"] != null)
+    {
+        <div class="alert alert-warning alert-dissmissible fade show" role="alert">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            @TempData["ErreurArticle"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    @if (TempData["SuccesArticle"] != null)
+    {
+        <div class="alert alert-success alert-dissmissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            @TempData["SuccesArticle"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="fas fa-shopping-basket me-2"></i>Ajouter les articles</h2>
+        <form method="post" action="/Ticket/TerminerTicket">
+            <input type="hidden" name="idTicket" value="@Model.IdTicket" />
+            <button type="submit" class="btn btn-success">
+                <i class="fas fa-check me-1"></i> Terminer le ticket
+            </button>
+        </form>
+    </div>
+    <!-- Infos ticket -->
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <strong><i class="fas fa-calendar me-1"></i> Date :</strong>
+                    @Model.DateAchat.ToString("dd.MM.yyyy")
+                </div>
+                <div class="col-md-4">
+                    <strong><i class="fas fa-store me-1"></i> Magasin :</strong>
+                    @Model.Magasin?.NomMagasin
+                </div>
+                <div class="col-md-4">
+                    <strong><i class="fas fa-map-marker-alt me-1"></i> Localité :</strong>
+                    @Model.Magasin?.Localite
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Formulaire ajout ligne -->
+    <div class="card shadow mb-4">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <span><i class="fas fa-plus me-1"></i> Ajouter un article</span>
+            <button type="button" class="btn btn-sm btn-light"
+                    onclick="document.getElementById('formNouvelArticle').style.display =
+                document.getElementById('formNouvelArticle').style.display === 'none' ? 'block' : 'none'">
+                <i class="fas fa-plus-circle me-1"></i> Nouvel article
+            </button>
+        </div>
+        <div class="card-body">
+            <form method="post" action="/Ticket/AjouterLigne" id="formAjouterLigne">
+                <input type="hidden" name="idTicket" value="@Model.IdTicket" />
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Article</label>
+                        <select name="idArticle" class="form-select" required>
+                            <option value="">-- Choisir --</option>
+                            @foreach (var article in articles)
+                            {
+                                <option value="@article.IdArticle">
+                                    @article.NomArticle (@article.Categorie?.NomCategorie)
+                                </option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label fw-bold">Quantité</label>
+                        <input type="number" name="quantite" class="form-control"
+                               step="0.01" min="0.01" required />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label fw-bold">Prix unitaire CHF</label>
+                        <input type="number" name="prixUnitaire" class="form-control"
+                               step="0.01" min="0.01" required />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label fw-bold">Rabais CHF</label>
+                        <input type="number" name="rabais" class="form-control"
+                               step="0.01" min="0" value="0" required />
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="submit" id="btnAjouter" class="btn btn-primary w-100">
+                            <i class="fas fa-plus me-1"></i> Ajouter
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Formulaire nouvel article - caché par défaut -->
+    <div class="card shadow mb-4" id="formNouvelArticle" style="display:none;">
+        <div class="card-header bg-success text-white">
+            <i class="fas fa-plus me-1"></i> Nouvel article
+        </div>
+        <div class="card-body">
+            <form method="post" action="/Ticket/AjouterArticle">
+                <input type="hidden" name="idTicket" value="@Model.IdTicket" />
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Nom de l'article</label>
+                        <input type="text" name="nomArticle" class="form-control"
+                               placeholder="Ex: Lait" required />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Unité</label>
+                        <select name="unite" class="form-select" required>
+                            <option value="pce">Pièce</option>
+                            <option value="kg">kg</option>
+                            <option value="L">Litre</option>
+                            <option value="g">g</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Catégorie</label>
+                        <select name="idCategorie" class="form-select" required>
+                            @foreach (var cat in categories)
+                            {
+                                <option value="@cat.IdCategorie">@cat.NomCategorie</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="submit" class="btn btn-success w-100">
+                            <i class="fas fa-save me-1"></i> Créer
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Lignes déjà ajoutées -->
+    <div class="card shadow">
+        <div class="card-header">
+            <i class="fas fa-list me-1"></i> Articles ajoutés
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-hover table-striped mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Article</th>
+                        <th>Unité</th>
+                        <th class="text-end">Quantité</th>
+                        <th class="text-end">Prix unitaire CHF</th>
+                        <th class="text-end">Rabais CHF</th>
+                        <th class="text-end">Total CHF</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Lignes.Any())
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center text-muted py-3">
+                                Aucun article ajouté pour l'instant
+                            </td>
+                        </tr>
+                    }
+                    @foreach (var ligne in Model.Lignes)
+                    {
+                        <tr>
+                            <td>@ligne.IdArticleNavigation?.NomArticle</td>
+                            <td>@ligne.IdArticleNavigation?.Unite</td>
+                            <td class="text-end">@ligne.Quantite.ToString("0.###")</td>
+                            <td class="text-end">@ligne.PrixUnitaire.ToString("N2")</td>
+                            <td class="text-end">@ligne.Rabais.ToString("N2")</td>
+                            <td class="text-end fw-bold">@((ligne.Quantite * ligne.PrixUnitaire - ligne.Rabais).ToString("N2"))</td>
+                            <td>
+                                <form method="post" action="/Ticket/SupprimerLigne">
+                                    <input type="hidden" name="idAchatLigne" value="@ligne.IdAchatLigne" />
+                                    <input type="hidden" name="idTicket" value="@Model.IdTicket" />
+                                    <button type="submit" class="btn btn-danger btn-sm">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                @if (!Model.Lignes.Any())
+                {
+                    <tfoot class="table-light">
+                        <tr>
+                            <td colspan="6" class="text-end fw-bold">TOTAL :</td>
+                            <td class="text-end fw-bold text-success fs-5">
+                                @Model.Total.ToString("N2") CHF
+                            </td>
+                        </tr>
+                    </tfoot>
+                }
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    document.getElementById('formAjouterLigne').addEventListener('submit', function (e) {
+        var btn = document.getElementById('btnAjouter');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Ajout...';
+    });
+</script>

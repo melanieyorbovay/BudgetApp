@@ -1,0 +1,159 @@
+﻿/* 
+   BudgetApp — Thème global (couleurs + styles partagés)
+   Chargé par _Layout.cshtml : s'applique à toutes les vues. */
+
+/* --- Palette : seul endroit à modifier pour changer les couleurs --- */
+:root {
+    --violet: #6C3FC5;
+    --violet-clair: #A855F7;
+    --rose: #EC4899;
+    --indigo: #4F46E5;
+    --indigo-clair: #818CF8;
+    --ambre: #F59E0B;
+    --ambre-clair: #FCD34D;
+    --violet-pale: #F5F3FF; /* fond des entêtes de tableau */
+    --violet-hover: #FAF5FF; /* survol des lignes */
+    --violet-bordure: #DDD6FE;
+    --badge-fond: #EDE9FE;
+    --rayon: 16px;
+}
+
+/* --- Bannière d'accueil --- */
+.hero-banner {
+    background: linear-gradient(135deg, var(--violet) 0%, var(--violet-clair) 50%, var(--rose) 100%);
+    border-radius: 20px;
+    padding: 40px;
+    color: #fff;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 30px rgba(108, 63, 197, 0.3);
+}
+
+/* --- Cartes statistiques (accueil) --- */
+.stat-card {
+    border: none;
+    border-radius: var(--rayon);
+    padding: 25px;
+    color: #fff;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    transition: transform 0.2s;
+}
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .stat-card.violet {
+        background: linear-gradient(135deg, var(--violet), #885CF6);
+    }
+
+    .stat-card.rose {
+        background: linear-gradient(135deg, var(--rose), #F472B6);
+    }
+
+    .stat-card.indigo {
+        background: linear-gradient(135deg, var(--indigo), var(--indigo-clair));
+    }
+
+.stat-icon {
+    font-size: 40px;
+    opacity: 0.8;
+    margin-bottom: 10px;
+}
+
+.stat-value {
+    font-size: 32px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 13px;
+    opacity: 0.85;
+    margin-top: 5px;
+}
+
+/* --- Carte générique : conteneur arrondi + ombre --- */
+.card-theme {
+    border: none;
+    border-radius: var(--rayon);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    overflow: hidden;
+}
+
+/* --- Entêtes de carte en dégradé --- */
+.card-header-violet,
+.card-header-indigo,
+.card-header-ambre {
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    padding: 15px 20px;
+}
+
+.card-header-violet {
+    background: linear-gradient(135deg, var(--violet), var(--violet-clair));
+}
+
+.card-header-indigo {
+    background: linear-gradient(135deg, var(--indigo), var(--indigo-clair));
+}
+
+.card-header-ambre {
+    background: linear-gradient(135deg, var(--ambre), var(--ambre-clair));
+}
+
+/* --- Tableaux --- */
+.table thead th {
+    background-color: var(--violet-pale);
+    color: var(--violet);
+    font-weight: 600;
+    border-bottom: 2px solid var(--violet-bordure);
+}
+.table thead.thead-violet th {
+    background: linear-gradient(135deg, var(--violet), var(--violet-clair));
+    color:#fff;
+    border-bottom: none;
+}
+
+.table tbody tr:hover {
+    background-color: var(--violet-hover);
+}
+
+/* --- Badges --- */
+.badge-magasin {
+    background-color: var(--badge-fond);
+    color: var(--violet);
+    padding: 4px 10px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.total-badge {
+    background: linear-gradient(135deg, var(--violet), var(--violet-clair));
+    color: #fff;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+/* --- Boutons aux couleurs du thème --- */
+.btn-theme,
+.btn-ambre {
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+}
+
+.btn-theme {
+    background: linear-gradient(135deg, var(--violet), var(--violet-clair));
+}
+
+.btn-ambre {
+    background: linear-gradient(135deg, var(--ambre), var(--ambre-clair));
+}
+
+    .btn-theme:hover,
+    .btn-ambre:hover {
+        color: #fff;
+        opacity: 0.92;
+    }
