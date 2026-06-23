@@ -8,7 +8,7 @@ Projet réalisé dans le cadre d'un **TPI (Travail Pratique Individuel) – cert
 
 ---
 
-** Fonctionnalités
+## Fonctionnalités
 
 - **Tickets** – saisie d'un ticket (date + magasin), ajout/modification/suppression de lignes d'achats,
 filtrage par mois et par année, version imprimable.
