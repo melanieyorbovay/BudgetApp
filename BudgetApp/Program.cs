@@ -54,6 +54,7 @@ namespace BudgetApp
                 using var scope = app.Services.CreateScope();
                 var db = scope.ServiceProvider.GetRequiredService<DataContext>();
                 db.Database.EnsureCreated();
+                SeedData.Initialize(db);
             }
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
