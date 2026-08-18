@@ -33,7 +33,9 @@ public partial class DataContext : DbContext
 
             entity.ToTable("Article");
 
-            entity.HasIndex(e => e.NomArticleNormalized, "UX_Article_NomArticleNormalized").IsUnique();
+            entity.HasIndex(e => e.NomArticleNormalized, "UX_Article_NomArticleNormalized")
+                .IsUnique()
+                .HasFilter(null);
 
             entity.Property(e => e.NomArticle).HasMaxLength(200);
             entity.Property(e => e.NomArticleNormalized)
