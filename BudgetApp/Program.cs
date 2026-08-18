@@ -39,6 +39,12 @@ namespace BudgetApp
 
             var app = builder.Build();
 
+            if (app.Environment.IsDevelopment())
+            {
+                using var scope = app.Services.CreateScope();
+                var db = scope.ServiceProvider.GetRequiredService<DataContext>();
+                db.Database.EnsureCreated();
+            }
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
@@ -47,8 +53,12 @@ namespace BudgetApp
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            if (!app.Environment.IsDevelopment())
+            {
+                app.UseHttpsRedirection();
+            }
             app.UseRouting();
+
 
             app.UseAuthorization();
 
@@ -57,7 +67,7 @@ namespace BudgetApp
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}")
                 .WithStaticAssets();
-            
+
 
             app.Run();
         }

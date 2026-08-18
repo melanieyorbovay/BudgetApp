@@ -1,0 +1,32 @@
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    platform: linux/amd64          # émulation Rosetta, obligatoire sur M4
+    container_name: budgetapp-db
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "Str0ng_Passw0rd!"
+      MSSQL_PID: "Express"
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql-data:/var/opt/mssql
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: budgetapp-web
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      # "db" = le nom du service ci-dessus, résolu par le réseau interne
+      # de Compose. Le nom de clé DOIT correspondre à celui lu dans
+      # Program.cs : GetConnectionString("BudgetApp").
+      ConnectionStrings__BudgetApp: "Server=db,1433;Database=Facture2026;User Id=sa;Password=Str0ng_Passw0rd!;TrustServerCertificate=True;Encrypt=False"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+volumes:
+  mssql-data:
