@@ -1,0 +1,40 @@
+<h1>{{ title() }}</h1>
+
+<h2>Ajouter un article</h2>
+
+<div>
+  <label>
+    Nom de l'article :
+    <input type="text" [(ngModel)]="nouveauNomArticle" />
+  </label>
+</div>
+
+<div>
+  <label>
+    Unité :
+    <input type="text" [(ngModel)]="nouveauUnite" />
+  </label>
+</div>
+
+<div>
+  <label>
+    Catégorie :
+    <select [(ngModel)]="nouveauIdCategorie">
+      <option value="">- Sélectionner une catégorie -</option>
+      @for (categorie of categories; track categorie.idCategorie) {
+        <option [ngValue]="categorie.idCategorie">{{ categorie.nomCategorie }}</option>
+      }
+    </select>
+  </label>
+</div>
+
+<button (click)="ajouterArticle()">Ajouter</button>
+
+<h2>Articles</h2>
+
+<ul>
+  @for (article of articles(); track article.idArticle) {
+    <li>{{ article.nomArticle }} ({{ article.unite }}) - 
+      {{ nomCategorie(article.idCategorie) }}</li>
+  }
+</ul>
