@@ -14,6 +14,16 @@ namespace BudgetApp
                 options.UseSqlServer(builder.Configuration.GetConnectionString("BudgetApp"))
             );
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AngularDev", policy =>
+                {
+                    policy.WithOrigins("Http://localhost:4200")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
+
             var cultureInfo = CultureInfo.InvariantCulture;
             CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
             CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
@@ -49,6 +59,8 @@ namespace BudgetApp
 
             app.UseHttpsRedirection();
             app.UseRouting();
+
+            app.UseCors("AngularDev");
 
             app.UseAuthorization();
 

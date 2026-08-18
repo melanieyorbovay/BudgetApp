@@ -1,6 +1,7 @@
 ﻿@model List<BudgetApp.ModelsV2.Ticket>
 @{
     ViewData["Title"] = "Tickets";
+    var magasins = ViewBag.Magasins as List<BudgetApp.ModelsV2.Magasin>;
 }
 <div class="container-fluid py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -38,6 +39,20 @@
                         <option value="2025" selected="@(ViewBag.Annee == 2025)">2025</option>
                         <option value="2026" selected="@(ViewBag.Annee == 2026)">2026</option>
                     </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Magasin</label>
+                    <select name="idMagasin" class="form-select">
+                        <option value="0">Tous</option>
+                        @foreach (var magasin in magasins)
+                            {
+                                <option value="@magasin.IdMagasin"
+                                    selected="@(ViewBag.IdMagasin == magasin.IdMagasin)">
+                                @magasin.NomMagasin - @magasin.Localite
+
+                            </option>
+                            }
+                        </select>
                 </div>
                 <div class="col-md-2">
                     <button type="submit" class="btn btn-primary w-100">

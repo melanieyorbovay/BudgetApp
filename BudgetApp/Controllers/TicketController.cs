@@ -11,7 +11,7 @@ namespace BudgetApp.Controllers
 
         public TicketController(DataContext context)
         {  _context = context; }
-        public IActionResult Index(int? mois, int? annee)
+        public IActionResult Index(int? mois, int? annee, int? idMagasin)
         {
             //avant foreach pour lier ligne (GetAll etc)
             var tickets = _context.Tickets
@@ -25,8 +25,14 @@ namespace BudgetApp.Controllers
             if (annee.HasValue && annee > 0)
                 tickets = tickets.Where(t => t.DateAchat.Year == annee);
 
+            if (idMagasin.HasValue && idMagasin > 0)
+                tickets = tickets.Where(t => t.IdMagasin == idMagasin);
+
             ViewBag.Mois = mois ?? 0;
             ViewBag.Annee = annee ?? 0;
+            ViewBag.IdMagasin = idMagasin ?? 0;
+            ViewBag.Magasins = _context.Magasins
+                .OrderBy(m => m.NomMagasin).ToList();
 
             return View(tickets.OrderByDescending(t => t.DateAchat).ToList());
 
