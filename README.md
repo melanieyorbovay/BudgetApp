@@ -29,27 +29,53 @@ Projet réalisé dans le cadre d'un **TPI (Travail Pratique Individuel) – cert
 ### Évolution des dépenses
 ![Graphique des dépenses](docs/graphique.png)
 
+## Structure du dépôt
 
-## Comment la lancer
+| Dossier | Contenu |
+|---|---|
+| `BudgetApp/` | Back-end ASP.NET Core MVC et API REST |
+| `budget-app-front/` | Front-end Angular 20 (en cours de développement) |
+| `docs/` | Captures d'écran |
 
+## Comment la lancer (3 étapes)
 
-Il faut **SQL Server Express** et **.NET 10** installés.
+### Avec Docker (recommandé)
 
-1. Cloner le dépôt.
-2. Créer votre base et l'alimenter avec les scripts SQL.
-3. Dans Visual Studio : clic droit sur le projet → **Gérer les secrets utilisateur**, puis y mettre sa propre chaîne de connexion :
-```json
-{
-  "ConnectionStrings": {
-    "BudgetApp": "Server=.\\SQLEXPRESS;Database=NOMDELABASE;Trusted_Connection=True;TrustServerCertificate=True;"
-  }
-}
+Seul **Docker Desktop** est nécessaire (Pas de .NET ni de SQL Server à installer)
+
+1. Cloner le dépôt :
+```bash
+git clone https://github.com/melanieyorbovay/BudgetApp.git
+cd BudgetApp
 ```
-4. Appuyer sur **F5**.
+2. Lancer dans le terminal :
+```bash
+docker compose up --build
+```
+3. Puis ouvrir **http://localhost:8080**
+
+Le premier lancement prend quelques minutes pour le téléchargement des images. La base est créée automatiquement et alimentée avec des données de démonstration.
+
+Pour arrêter : `Ctrl+C` puis `docker compose down`. Les données sont conservées dans un volume Docker ; `docker compose down -v` les supprime.
+
+### Front-end Angular (en cours)
+
+```bash
+cd budget-app-front
+npm install
+ng serve
+```
+Puis **http://localhost:4200**. L'API doit tourner en parallèle sur le port 8080.
+
+
+> Pour développer sans Docker : SQL Server Express, .NET 10, et la chaîne de connexion dans les secrets utilisateur (clé `ConnectionStrings:BudgetApp`).
+
+> Le mot de passe de la base dans `docker-compose.yml` est volontairement en clair : il ne concerne qu'un conteneur de développement jetable pour démonstration
+
 
 ## Stack
 
-ASP.NET Core MVC (.NET 10) · C# · Entity Framework Core · SQL Server Express · Bootstrap 5 · Chart.js
+ASP.NET Core MVC (.NET 10) · C# · Entity Framework Core · SQL Server · Angular 20 · TypeScript · Bootstrap 5 · Chart.js · Docker
 
 ---
 
