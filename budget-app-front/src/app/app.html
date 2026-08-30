@@ -12,7 +12,11 @@
 <div>
   <label>
     Unité :
-    <input type="text" [(ngModel)]="nouveauUnite" />
+    <select [(ngModel)]="nouveauUnite">
+      @for (unite of unites(); track unite) {
+        <option [value]="unite">{{ unite }}</option>
+      }
+    </select>
   </label>
 </div>
 
@@ -21,7 +25,7 @@
     Catégorie :
     <select [(ngModel)]="nouveauIdCategorie">
       <option value="">- Sélectionner une catégorie -</option>
-      @for (categorie of categories; track categorie.idCategorie) {
+      @for (categorie of categories(); track categorie.idCategorie) {
         <option [ngValue]="categorie.idCategorie">{{ categorie.nomCategorie }}</option>
       }
     </select>
@@ -29,6 +33,9 @@
 </div>
 
 <button (click)="ajouterArticle()">Ajouter</button>
+@if (messageErreur) {
+  <p style="color: red;">{{ messageErreur }}</p>
+}
 
 <h2>Articles</h2>
 

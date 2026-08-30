@@ -17,57 +17,57 @@ export class App {
   
   private articleService = inject(ArticleService);
 
+  articles = signal<Article[]>([]);
+  categories = signal<Categorie[]>([]);
+  unites = signal<string[]>([]);
+
+  //Proptiétés pour le formulaire d'ajout d'articles
+  nouveauNomArticle: string = '';
+  nouveauUnite: string = 'pièce';
+  nouveauIdCategorie: number = 0;
+  messageErreur: string = '';
+
   constructor() {
     this.articleService.getArticles().subscribe(data => {
       this.articles.set(data);
     });
+    this.articleService.getCategories().subscribe(data => {
+      this.categories.set(data);
+    });
+    this.articleService.getUnites().subscribe(data => {
+      this.unites.set(data);
+    });
   }
 
-  articles = signal<Article[]>([]); 
-
-  categories: Categorie[] = [
-    { idCategorie: 1, nomCategorie: 'Fruits et legumes' },
-    { idCategorie: 2, nomCategorie: 'Boulangerie' },
-    { idCategorie: 3, nomCategorie: 'Produits laitiers' },
-    { idCategorie: 4, nomCategorie: 'Viande et substituts' },
-    { idCategorie: 5, nomCategorie: 'Surgeles' },
-    { idCategorie: 6, nomCategorie: 'Conserves' },
-    { idCategorie: 7, nomCategorie: 'Pates et riz' },
-    { idCategorie: 8, nomCategorie: 'Epices et condiments' },
-    { idCategorie: 9, nomCategorie: 'Snacks et confiseries ' },
-    { idCategorie: 10, nomCategorie: 'Boissons' },
-    { idCategorie: 11, nomCategorie: 'Papeterie' },
-    { idCategorie: 12, nomCategorie: 'Autres' },
-    { idCategorie: 13, nomCategorie: 'Entretien et nettoyages' }
-    
-  ];
-  unites: string[] = ['piece', 'kg', 'litre', 'boite', 'sachet', 'bouteille', 'carton', 'paquet'];
-  
-  //ajout de propriétés pour le formulaire d'ajout d'article
-  nouveauNomArticle: string = '';
-  nouveauUnite: string = 'piece';
-  nouveauIdCategorie: number = 0;
-
   nomCategorie(id: number) {
-    const categorie = this.categories.find(c => c.idCategorie === id);
+    const categorie = this.categories().find(c => c.idCategorie === id);
     return categorie ? categorie.nomCategorie : 'Inconnue';
   }
 
   ajouterArticle() {
     if (this.nouveauNomArticle && this.nouveauUnite && this.nouveauIdCategorie) {
       const nouvelArticle: Article = {
-        idArticle: this.articles().length + 1, // Génère un nouvel ID basé sur la longueur du tableau
+        //idArticle: this.articles().length + 1, // Génère un nouvel ID basé sur la longueur du tableau
+        idArticle: 0, // L'Api l'ignore, la base génère le vrai
         nomArticle: this.nouveauNomArticle,
         unite: this.nouveauUnite,
         idCategorie: this.nouveauIdCategorie
       };
-      this.articleService.ajouterArticle(nouvelArticle);
+      this.articleService.ajouterArticle(nouvelArticle).subscribe({
+        next: (articleCree) => {
+          this.articles.update(liste => [...liste, articleCree]);
+          this.nouveauNomArticle = '';
+          this.nouveauUnite = 'pièce';
+          this.nouveauIdCategorie = 0;
+          this.messageErreur = '';
+        },
+        error: (err) => {
+          this.messageErreur = err.status === 409
+          ? err.error
+          : 'Erreur lors de l\'ajout.';
+        }
+      });
       
-      // Met à jour la liste des articles
-      // Réinitialiser les champs du formulaire
-      this.nouveauNomArticle = '';
-      this.nouveauUnite = '';
-      this.nouveauIdCategorie = 0;
     }
   }
 
