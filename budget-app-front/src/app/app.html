@@ -1,47 +1,108 @@
-<h1>{{ title() }}</h1>
+<div class="page">
+  <header class="entete">
+    <h1>Mes articles</h1>
+    <p class="sous-titre">Gestion du catalogue d'articles budgétaires</p>
+  </header>
 
-<h2>Ajouter un article</h2>
-
-<div>
-  <label>
-    Nom de l'article :
-    <input type="text" [(ngModel)]="nouveauNomArticle" />
-  </label>
-</div>
-
-<div>
-  <label>
-    Unité :
-    <select [(ngModel)]="nouveauUnite">
-      @for (unite of unites(); track unite) {
-        <option [value]="unite">{{ unite }}</option>
-      }
-    </select>
-  </label>
-</div>
-
-<div>
-  <label>
-    Catégorie :
-    <select [(ngModel)]="nouveauIdCategorie">
-      <option value="">- Sélectionner une catégorie -</option>
-      @for (categorie of categories(); track categorie.idCategorie) {
-        <option [ngValue]="categorie.idCategorie">{{ categorie.nomCategorie }}</option>
-      }
-    </select>
-  </label>
-</div>
-
-<button (click)="ajouterArticle()">Ajouter</button>
-@if (messageErreur) {
-  <p style="color: red;">{{ messageErreur }}</p>
-}
-
-<h2>Articles</h2>
-
-<ul>
-  @for (article of articles(); track article.idArticle) {
-    <li>{{ article.nomArticle }} ({{ article.unite }}) - 
-      {{ nomCategorie(article.idCategorie) }}</li>
+  @if (messageErreur()) {
+    <div class="alerte alerte-erreur" role="alert">{{ messageErreur() }}</div>
   }
-</ul>
+
+<section class="carte">
+  <h2 class="carte-titre">Ajouter un article</h2>
+
+<div class="formulaire">
+  <div class="champ">
+    <label for="nomArticle">Nom de l'article</label>
+    <input id="nomArticle" type="text" name="nomArticle"
+      [(ngModel)]="nouveauNomArticle" placeholder="Farine">
+  </div>
+
+  <div class="champ">
+  <label for="unite">Unité</label>  
+  <select id="unite" name="unite" [(ngModel)]="nouveauUnite">
+    @for (u of unites(); track u) {
+      <option [value]="u">{{ u }}</option>
+    }
+  </select>
+</div>
+
+<div class="champ">
+  <label for="categorie">Catégorie</label>
+  <select id="categorie" name="categorie" [(ngModel)]="nouveauIdCategorie">
+    <option [ngValue]="0">Choisir...</option>
+    @for (c of categories(); track c.idCategorie) {
+      <option [ngValue]="c.idCategorie">{{ c.nomCategorie }}</option>
+      }
+  </select>
+</div>
+
+<div class="champ champ-action">
+  <button type="button" class="btn btn-primaire" (click)="ajouterArticle()">
+    Ajouter
+    </button>
+</div>
+</div>
+</section>
+
+<!-- Filtres-->
+<section class="barre-filtres">
+  <div class="champ champ-recherche">
+    <label for="recherche">Rechercher</label>
+    <input id="recherche" type="search" [value]="termRecherche()"
+      (input)="majRecherche($event)" placeholder="Nom de l'article...">
+  </div>
+  <div class="champ">
+    <label for="filtreCategorie">Catégorie</label>
+    <select id="filtreCategorie" [value]="categorieFiltre()"
+      (change)="majCategorie($event)">
+    <option value="">Toutes les catégories</option>
+    @for (c of categories(); track c.idCategorie) {
+      <option [value]="c.idCategorie">{{ c.nomCategorie }}</option>
+    }
+    </select>
+
+</div>
+  <button type="button" class="btn btn-secondaire" (click)="reinitialiserFiltres()">
+    Réinitialiser
+  </button>
+
+  <span class="compteur">
+    {{ articlesFiltres().length }} / {{ articles().length }} article(s)
+  </span>
+</section>
+
+<!--Tableau -->
+<section class="carte carte-tableau">
+  <table class="tableau">
+    <thead>
+      <tr>
+        <th scope="col">Nom</th>
+        <th scope="col">Unité</th>
+        <th scope="col">Catégorie</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (article of articlesFiltres(); track article.idArticle) {
+        <tr>
+          <td class="cellule-nom">{{ article.nomArticle }}</td>
+          <td><span class="etiquette">{{ article.unite }}</span></td>
+          <td>{{ nomCategorie(article.idCategorie) }}</td>
+        </tr>
+
+      } @empty {
+        <tr>
+          <td colspan="3" class="cellule-vide">
+            @if (articles().length === 0) {
+              Aucun article enregistré pour le moment.
+            } @else {
+              Aucun article ne correspond à ces critères.
+            }
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</section>
+
+</div>
