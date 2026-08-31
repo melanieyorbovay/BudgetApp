@@ -1,1 +1,68 @@
-/* You can add global styles to this file, and also import other style files */
+/* ===== Variables ===== */
+:root {
+  --couleur-fond: #f4f5f7;
+  --couleur-surface: #ffffff;
+  --couleur-bordure: #e2e5ea;
+  --couleur-texte: #1f2933;
+  --couleur-texte-faible: #6b7684;
+  --couleur-primaire: #2f5d8a;
+  --couleur-primaire-clair: #eaf1f8;
+  --couleur-danger: #b3261e;
+  --couleur-danger-fond: #fdeceb;
+
+  --rayon: 8px;
+  --espace: 16px;
+  --ombre: 0 1px 3px rgba(16, 24, 40, 0.08);
+
+  --police: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+/* ===== Reset ===== */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--police);
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--couleur-texte);
+  background: var(--couleur-fond);
+}
+
+h1, h2, h3 { margin: 0; font-weight: 600; line-height: 1.25; }
+
+/* ===== Contrôles ===== */
+input, select, button { font: inherit; }
+
+input[type="text"], input[type="search"], select {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--couleur-bordure);
+  border-radius: var(--rayon);
+  background: var(--couleur-surface);
+  color: inherit;
+}
+
+input:focus-visible, select:focus-visible, button:focus-visible {
+  outline: 2px solid var(--couleur-primaire);
+  outline-offset: 1px;
+}
+
+.btn {
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-radius: var(--rayon);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-primaire { background: var(--couleur-primaire); color: #fff; }
+.btn-primaire:hover { background: #26496c; }
+
+.btn-secondaire {
+  background: var(--couleur-surface);
+  border-color: var(--couleur-bordure);
+  color: var(--couleur-texte-faible);
+}
+.btn-secondaire:hover { background: var(--couleur-primaire-clair); }
+
