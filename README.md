@@ -55,7 +55,7 @@ cd BudgetApp
 ```bash
 docker compose up --build
 ```
-3. Puis ouvrir **http://localhost:8080**
+3. Puis ouvrir **http://localhost:7166**, lancée depuis Visual Studio (et non via Docker : le conteneur écoute sur 8080, alors que le front appelle 7166).
 
 Le premier lancement prend quelques minutes pour le téléchargement des images. La base est créée automatiquement et alimentée avec des données de démonstration.
 
