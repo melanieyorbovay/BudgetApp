@@ -10,7 +10,7 @@ public partial class Article
     public string NomArticle { get; set; } = null!; //null indique que EF Core remplira toujours cette valeur
 
     public string Unite { get; set; } = null!;
-
+    //public int? UniteId {  get; set; } //On met nullable pour le moment car pas d'unité liée pour le moment
     public int IdCategorie { get; set; } //EF détecte que c'est une FK vers Categorie
 
     public string? NomArticleNormalized { get; set; }

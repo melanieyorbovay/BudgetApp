@@ -3,6 +3,7 @@ import { HttpClient} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Article} from './article.model';
 import { Categorie } from './categorie.model';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ import { Categorie } from './categorie.model';
 export class ArticleService {
     private http = inject(HttpClient);
 
-    private apiUrlArticles = 'https://localhost:7166/api/articles';
+    private apiUrlArticles = `${environment.apiUrl}/articles`; //'https://localhost:7166/api/articles';
     private apiUrlCategories = 'https://localhost:7166/api/categories';
     private apiUrlUnites = 'https://localhost:7166/api/unites';
 
