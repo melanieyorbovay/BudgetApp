@@ -128,6 +128,8 @@ protected readonly articlesFiltres = computed(() => {
   protected enregistrerArticle(): void {
     if (this.articleEnEdition()) {
       this.modifierArticle();
+    } else {
+      this.ajouterArticle();
     }
   }
   private modifierArticle(): void {
@@ -149,7 +151,7 @@ protected readonly articlesFiltres = computed(() => {
           liste.map(a => a.idArticle === articleRecu.idArticle ? articleRecu : a));
           this.articleEnEdition.set(null);
           this.reinitialiserFormulaire();
-          this,this.messageErreur.set('');
+          this.messageErreur.set('');
       },
       error: (err) => {
         this.messageErreur.set(
