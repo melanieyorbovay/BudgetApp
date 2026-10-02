@@ -43,6 +43,9 @@ Projet réalisé dans le cadre d'un **TPI (Travail Pratique Individuel) – cert
 
 Seul **Docker Desktop** est nécessaire (Pas de .NET ni de SQL Server à installer)
 
+Sur Mac Apple Silicon, activer Rosetta dans Docker Desktop (Settings -> General -> "Use Rosetta for x86/amd64 emulation") : 
+l'image SQL Server n'existe qu'en amd64, d'où le `platform: linux/amd64` déclaré dans docker-compose.yml.
+
 1. Cloner le dépôt :
 ```bash
 git clone https://github.com/melanieyorbovay/BudgetApp.git
@@ -52,7 +55,7 @@ cd BudgetApp
 ```bash
 docker compose up --build
 ```
-3. Puis ouvrir **http://localhost:8080**
+3. Puis ouvrir **http://localhost:7166**, lancée depuis Visual Studio (et non via Docker : le conteneur écoute sur 8080, alors que le front appelle 7166).
 
 Le premier lancement prend quelques minutes pour le téléchargement des images. La base est créée automatiquement et alimentée avec des données de démonstration.
 
