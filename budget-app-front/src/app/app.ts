@@ -1,5 +1,5 @@
 import { Component, computed, signal, inject } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+//import { RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Article } from './article.model';
 import { Categorie }  from './categorie.model';
@@ -8,7 +8,7 @@ import { ArticleService } from './article.service';
 //decorateur:
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, FormsModule], //sinon ngModel oas reconnu (équivent using)
+  imports: [FormsModule], //sinon ngModel pas reconnu (équivent using)
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -27,6 +27,9 @@ export class App {
   nouveauIdCategorie: number = 0;
   //signal : modifié dans un callback asynchrone, doit donc déclencher le rendu
   messageErreur = signal<string>('');
+
+  //Article en cours de modification (nul = mode ajout)
+  articleEnEdition = signal<Article | null>(null);
 
   //Filtres
   protected readonly termRecherche = signal<string>('');
@@ -108,6 +111,60 @@ protected readonly articlesFiltres = computed(() => {
     });
       
     }
+  }
+  protected commencerModification(article: Article): void {
+    this.articleEnEdition.set(article);
+    this.nouveauNomArticle = article.nomArticle;
+    this.nouveauUnite = article.unite;
+    this.nouveauIdCategorie = article.idCategorie;
+    this.messageErreur.set('');
+  
+  }
+  protected annulerModification(): void {
+    this.articleEnEdition.set(null);
+    this.reinitialiserFormulaire();
+  }
+  // Appelée par le bouton du formulaire: ajout ou modif selon le mode
+  protected enregistrerArticle(): void {
+    if (this.articleEnEdition()) {
+      this.modifierArticle();
+    }
+  }
+  private modifierArticle(): void {
+    const enEdition = this.articleEnEdition();
+    if (!enEdition || !this.nouveauNomArticle || !this.nouveauUnite || !this.nouveauIdCategorie) {
+      return;
+    }
+
+    const articleModifie: Article = {
+      idArticle: enEdition.idArticle,
+      nomArticle: this.nouveauNomArticle,
+      unite: this.nouveauUnite,
+      idCategorie: this.nouveauIdCategorie
+    };
+
+    this.articleService.modifierArticle(articleModifie).subscribe({
+      next: (articleRecu) => {
+        this.articles.update(liste =>
+          liste.map(a => a.idArticle === articleRecu.idArticle ? articleRecu : a));
+          this.articleEnEdition.set(null);
+          this.reinitialiserFormulaire();
+          this,this.messageErreur.set('');
+      },
+      error: (err) => {
+        this.messageErreur.set(
+          err.status === 409 ? err.error : 'Erreur lors de la modification.'
+        );
+      }
+      
+    });
+
+  }
+  private reinitialiserFormulaire(): void {
+    this.nouveauNomArticle = '';
+    this.nouveauUnite = 'pièce';
+    this.nouveauIdCategorie = 0;
+
   }
 
 }

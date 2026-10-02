@@ -9,7 +9,7 @@
   }
 
 <section class="carte">
-  <h2 class="carte-titre">Ajouter un article</h2>
+  <h2 class="carte-titre">{{ articleEnEdition() ? 'Modifier un article' : 'Ajouter un article' }}</h2>
 
 <div class="formulaire">
   <div class="champ">
@@ -38,9 +38,14 @@
 </div>
 
 <div class="champ champ-action">
-  <button type="button" class="btn btn-primaire" (click)="ajouterArticle()">
-    Ajouter
+  <button type="button" class="btn btn-primaire" (click)="enregistrerArticle()">
+    {{ articleEnEdition() ? 'Enregistrer' : 'Ajouter' }}
     </button>
+    @if (articleEnEdition()) {
+      <button type="button" class=" btn-secondaire" (click)="annulerModification()">
+        Annuler
+      </button>
+    }
 </div>
 </div>
 </section>
@@ -80,6 +85,7 @@
         <th scope="col">Nom</th>
         <th scope="col">Unité</th>
         <th scope="col">Catégorie</th>
+        <th scop="col">Actions</th>
       </tr>
     </thead>
     <tbody>
@@ -88,11 +94,16 @@
           <td class="cellule-nom">{{ article.nomArticle }}</td>
           <td><span class="etiquette">{{ article.unite }}</span></td>
           <td>{{ nomCategorie(article.idCategorie) }}</td>
+          <td>
+            <button type="button" class="btn btn-secondaire" (click)="commencerModification(article)">
+              Modifier
+            </button>
+          </td>
         </tr>
 
       } @empty {
         <tr>
-          <td colspan="3" class="cellule-vide">
+          <td colspan="4" class="cellule-vide">
             @if (articles().length === 0) {
               Aucun article enregistré pour le moment.
             } @else {

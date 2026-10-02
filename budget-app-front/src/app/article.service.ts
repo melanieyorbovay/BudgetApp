@@ -12,8 +12,8 @@ export class ArticleService {
     private http = inject(HttpClient);
 
     private apiUrlArticles = `${environment.apiUrl}/articles`; //'https://localhost:7166/api/articles';
-    private apiUrlCategories = 'https://localhost:7166/api/categories';
-    private apiUrlUnites = 'https://localhost:7166/api/unites';
+    private apiUrlCategories = `${environment.apiUrl}/categories`//'https://localhost:7166/api/categories';
+    private apiUrlUnites = `${environment.apiUrl}/unites`//'https://localhost:7166/api/unites';
 
     getArticles(): Observable<Article[]> {
         return this.http.get<Article[]>(this.apiUrlArticles);
@@ -29,6 +29,10 @@ export class ArticleService {
 
     ajouterArticle(article: Article): Observable<Article> {
         return this.http.post<Article>(this.apiUrlArticles, article);
+    }
+
+    modifierArticle(article: Article): Observable<Article> {
+        return this.http.put<Article>(`${this.apiUrlArticles}/${article.idArticle}`, article);
     }
 }
 

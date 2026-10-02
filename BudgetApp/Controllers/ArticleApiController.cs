@@ -1,5 +1,6 @@
 ﻿using BudgetApp.ModelsV2;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BudgetApp.Controllers
 {
@@ -46,6 +47,43 @@ namespace BudgetApp.Controllers
 
             //L'article retourné contient le vrai ID généré par la base de données SQL Server.
             return Ok(nouvel);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> ModifierArticle(int id, [FromBody] Article article)
+        {
+            if (string.IsNullOrWhiteSpace(article.NomArticle) || string.IsNullOrWhiteSpace(article.Unite))
+            {
+                return BadRequest("Le nom et l'unité sont obligatoires.");
+            }
+            var existant = await _context.Articles.FindAsync(id);
+            if (existant == null)
+            {
+                return NotFound();
+            }
+            var nom = article.NomArticle.Trim();
+            var unite = article.Unite.Trim();
+
+            bool doublon = await _context.Articles
+                .AnyAsync(a => a.IdArticle != id && a.NomArticleNormalized == nom.ToLower());
+            if (doublon)
+            {
+                return Conflict($"L'article \"{nom}\" existe déjà.");
+            }
+
+            existant.NomArticle = nom;
+            existant.Unite = unite;
+            existant.IdCategorie = article.IdCategorie;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                return Conflict("Impossible de modifier l'article (doublon ou catégorie invalide).");
+            }
+            return Ok(existant);
         }
     }
 }
